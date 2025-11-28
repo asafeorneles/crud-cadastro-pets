@@ -1,0 +1,13 @@
+services:
+  mysql:
+    image: mysql:8
+    container_name: mysql_cadastro_pets
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: pets_api
+    ports:
+      - "3306:3306"
+    volumes:
+      - pets_data:/var/lib/mysql
+volumes:
+  pets_data:
