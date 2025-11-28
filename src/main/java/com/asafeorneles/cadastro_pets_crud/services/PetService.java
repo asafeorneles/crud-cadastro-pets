@@ -1,0 +1,35 @@
+package com.asafeorneles.cadastro_pets_crud.services;
+
+import com.asafeorneles.cadastro_pets_crud.dtos.PetRecordDto;
+import com.asafeorneles.cadastro_pets_crud.entities.Pet;
+import com.asafeorneles.cadastro_pets_crud.repositories.PetReposirory;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.UUID;
+
+@Service
+public class PetService {
+
+    @Autowired
+    private PetReposirory petReposirory;
+
+    public Pet createPet(PetRecordDto petRecordDto){
+        var pet = new Pet();
+        BeanUtils.copyProperties(petRecordDto, pet);
+        return petReposirory.save(pet);
+    }
+
+    public List<Pet> findAllPets(){
+        return petReposirory.findAll();
+    }
+
+    public Pet findById (UUID id){
+        return petReposirory.findById(id)
+                .orElseThrow(() -> new RuntimeException("Pet not found"));
+    }
+}
