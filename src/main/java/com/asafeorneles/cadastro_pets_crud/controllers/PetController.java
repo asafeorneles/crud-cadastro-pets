@@ -42,4 +42,10 @@ public class PetController {
         Pet pet = petService.updatePet(id, petRecordDto);
         return ResponseEntity.status(HttpStatus.OK).body(pet);
     }
+
+    @DeleteMapping("/pets/{id}")
+    public ResponseEntity<?> deletePet(@PathVariable(value = "id") UUID id){
+        petService.deletePet(id);
+        return ResponseEntity.status(HttpStatus.OK).body("Pet deleted successfully");
+    }
 }

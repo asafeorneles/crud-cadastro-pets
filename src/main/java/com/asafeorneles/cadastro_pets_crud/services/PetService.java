@@ -38,4 +38,10 @@ public class PetService {
         BeanUtils.copyProperties(petRecordDto, petFound);
         return petReposirory.save(petFound);
     }
+
+    public void deletePet (UUID id){
+        Pet petFound = petReposirory.findById(id)
+                .orElseThrow(() -> new PetNotFoundException("Pet not found"));
+        petReposirory.delete(petFound);
+    }
 }
