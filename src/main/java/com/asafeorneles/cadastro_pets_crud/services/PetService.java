@@ -19,9 +19,9 @@ public class PetService {
     private PetReposirory petReposirory;
 
     public Pet createPet(PetRecordDto petRecordDto){
-        var pet = new Pet();
-        BeanUtils.copyProperties(petRecordDto, pet);
-        return petReposirory.save(pet);
+            var pet = new Pet();
+            BeanUtils.copyProperties(petRecordDto, pet);
+            return petReposirory.save(pet);
     }
 
     public List<Pet> findAllPets(Specification<Pet> specification){
