@@ -1,12 +1,33 @@
 package com.asafeorneles.cadastro_pets_crud.specifications;
 
 import com.asafeorneles.cadastro_pets_crud.entities.Pet;
+import com.asafeorneles.cadastro_pets_crud.enums.Sexo;
+import com.asafeorneles.cadastro_pets_crud.enums.Tipo;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.util.ObjectUtils;
 
 import java.math.BigDecimal;
 
 public class PetSpecification {
+    public static Specification<Pet> haveType(String type){
+        return (root, query, builder) -> {
+            if (ObjectUtils.isEmpty(type)){
+                return null;
+            }
+            Tipo tipo = Tipo.fromValue(type);
+            return builder.equal(root.get("type"), tipo.getTIPO());
+        };
+    }
+
+    public static Specification<Pet> haveSex(String sex){
+        return (root, query, builder)->{
+            if (ObjectUtils.isEmpty(sex)){
+                return null;
+            }
+            return builder.equal(root.get("sexo"), Sexo.fromValue(sex));
+        };
+    }
+
     public static Specification<Pet> nameContains(String name) {
         return (root, query, builder) -> {
             if (ObjectUtils.isEmpty(name)) {

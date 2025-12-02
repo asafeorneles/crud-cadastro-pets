@@ -12,6 +12,8 @@ import java.math.BigDecimal;
 @Data
 public class PetQueryFilters {
     private String name;
+    private String type;
+    private String sex;
     private String lastName;
     private BigDecimal age;
     private BigDecimal weight;
@@ -25,6 +27,8 @@ public class PetQueryFilters {
 
     public Specification<Pet> toSpecification() {
         return nameContains(name)
+                .and(haveType(type))
+                .and(haveSex(sex))
                 .and(lastNameContains(lastName))
                 .and(equalsAge(age))
                 .and(equalsWeight(weight))
