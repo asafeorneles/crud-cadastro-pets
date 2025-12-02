@@ -23,9 +23,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 class PetServiceTest {
-    // Quando algum metodo que é testado depende dessa instância (petRepository), o Mockito vai criar os métodos de
-    // petRepository como se estivessem vazios, sem acessar banco, sem executar lógica real, sem nada pesado. Ele também permite que controlemos o que ele retorna quando a instância é chamada.
-
     @Mock
     private PetReposirory petReposirory;
 
