@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.data.jpa.domain.Specification;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -172,12 +173,56 @@ class PetSpecificationTest {
             petReposirory.save(petBola);
             petReposirory.save(petRex);
 
-            Specification<Pet> bolSpec = PetSpecification.nameContains("sasa");
+            Specification<Pet> falseSpec = PetSpecification.nameContains("sasa");
 
-            List<Pet> petsFound = petReposirory.findAll(bolSpec);
+            List<Pet> petsFound = petReposirory.findAll(falseSpec);
 
             assertTrue(petsFound.isEmpty());
         }
 
+    }
+
+    @Nested
+    class equalsAge{
+        @Test
+        void shouldFindPetByAgeWithSuccessUsingSpecification(){
+            var petAge15_4 = Pet.builder().age(BigDecimal.valueOf(15.4)).build();
+            var petAge9 = Pet.builder().age(BigDecimal.valueOf(9)).build();
+            petReposirory.save(petAge15_4);
+            petReposirory.save(petAge9);
+            Specification<Pet> spec15_4 = PetSpecification.equalsAge(BigDecimal.valueOf(15.4));
+
+            List<Pet> petsFound = petReposirory.findAll(spec15_4);
+
+            assertEquals(1, petsFound.size());
+            assertEquals(petAge15_4, petsFound.get(0));
+        }
+
+        @Test
+        void shouldReturnAllPetsWhenParamIsNullUsingAgeSpecification(){
+            var petAge15_4 = Pet.builder().age(BigDecimal.valueOf(15.4)).build();
+            var petAge9 = Pet.builder().age(BigDecimal.valueOf(9)).build();
+            petReposirory.save(petAge15_4);
+            petReposirory.save(petAge9);
+
+            List<Pet> petsFound = petReposirory.findAll(PetSpecification.nameContains(null));
+
+            assertFalse(petsFound.isEmpty());
+            assertEquals(2, petsFound.size());
+        }
+
+        @Test
+        void shouldReturnOneListEmptyWhenPetIsNotFoundByAgeUsingSpecification() {
+            var petAge15_4 = Pet.builder().age(BigDecimal.valueOf(15.4)).build();
+            var petAge9 = Pet.builder().age(BigDecimal.valueOf(9)).build();
+            petReposirory.save(petAge15_4);
+            petReposirory.save(petAge9);
+
+            Specification<Pet> falseSpec = PetSpecification.equalsAge(BigDecimal.valueOf(19));
+
+            List<Pet> petsFound = petReposirory.findAll(falseSpec);
+
+            assertTrue(petsFound.isEmpty());
+        }
     }
 }
