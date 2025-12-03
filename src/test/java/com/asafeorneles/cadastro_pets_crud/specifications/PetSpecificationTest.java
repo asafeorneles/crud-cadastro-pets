@@ -29,7 +29,7 @@ class PetSpecificationTest {
     @Nested
     class haveType {
         @Test
-        void shouldFindPetByTypeWithSuccess() {
+        void shouldFindPetByTypeWithSuccessUsingSpecification() {
             var petGato = Pet.builder().type(Tipo.GATO).build();
             var petCachorro = Pet.builder().type(Tipo.CACHORRO).build();
             petReposirory.save(petGato);
@@ -52,7 +52,7 @@ class PetSpecificationTest {
         }
         
         @Test
-        void shouldReturnAllPetsWhenParamIsNull(){
+        void shouldReturnAllPetsWhenParamIsNullUsingSpecification(){
             var petGato = Pet.builder().type(Tipo.GATO).build();
             var petCachorro = Pet.builder().type(Tipo.CACHORRO).build();
             petReposirory.save(petGato);
@@ -65,7 +65,7 @@ class PetSpecificationTest {
         }
 
         @Test
-        void shouldReturnOneListEmptyWhenPetIsNotFoundByType() {
+        void shouldReturnOneListEmptyWhenPetIsNotFoundByTypeUsingSpecification() {
             Specification<Pet> dogSpec = PetSpecification.haveType("cachorro");
             Specification<Pet> catSpec = PetSpecification.haveType("gato");
 
@@ -81,7 +81,7 @@ class PetSpecificationTest {
     @Nested
     class haveSex {
         @Test
-        void shouldFindPetByTypeWithSuccess() {
+        void shouldFindPetByTypeWithSuccessUsingSpecification() {
             var petFemea = Pet.builder().sexo(Sexo.FEMININO).build();
             var petMacho = Pet.builder().sexo(Sexo.MASCULINO).build();
             petReposirory.save(petFemea);
@@ -104,7 +104,7 @@ class PetSpecificationTest {
         }
 
         @Test
-        void shouldReturnAllPetsWhenParamIsNull(){
+        void shouldReturnAllPetsWhenParamIsNullUsingSpecification(){
             var petFemea = Pet.builder().sexo(Sexo.FEMININO).build();
             var petMacho = Pet.builder().sexo(Sexo.MASCULINO).build();
             petReposirory.save(petFemea);
@@ -117,7 +117,7 @@ class PetSpecificationTest {
         }
 
         @Test
-        void shouldReturnOneListEmptyWhenPetIsNotFoundByType() {
+        void shouldReturnOneListEmptyWhenPetIsNotFoundByTypeUsingSpecification() {
             Specification<Pet> femSpec = PetSpecification.haveSex("femea");
             Specification<Pet> mascSpec = PetSpecification.haveSex("macho");
 
@@ -129,11 +129,55 @@ class PetSpecificationTest {
         }
     }
 
-    @Test
-    void nameContains() {
-    }
+    @Nested
+    class nameContains{
+        @Test
+        void shouldFindPetByNameWithSuccessUsingSpecification(){
+            var petBolinha = Pet.builder().name("Bolinha").build();
+            var petBola = Pet.builder().name("Bola").build();
+            var petRex = Pet.builder().name("Rex").build();
+            petReposirory.save(petBolinha);
+            petReposirory.save(petBola);
+            petReposirory.save(petRex);
+            Specification<Pet> bolSpec = PetSpecification.nameContains("Bol");
 
-    @Test
-    void equalsAge() {
+            List<Pet> petsFound = petReposirory.findAll(bolSpec);
+
+            assertEquals(2, petsFound.size());
+            assertEquals(petBolinha, petsFound.get(0));
+            assertEquals(petBola, petsFound.get(1));
+        }
+
+        @Test
+        void shouldReturnAllPetsWhenParamIsNullUsingNameSpecification(){
+            var petBolinha = Pet.builder().name("Bolinha").build();
+            var petBola = Pet.builder().name("Bola").build();
+            var petRex = Pet.builder().name("Rex").build();
+            petReposirory.save(petBolinha);
+            petReposirory.save(petBola);
+            petReposirory.save(petRex);
+
+            List<Pet> petsFound = petReposirory.findAll(PetSpecification.nameContains(null));
+
+            assertFalse(petsFound.isEmpty());
+            assertEquals(3, petsFound.size());
+        }
+
+        @Test
+        void shouldReturnOneListEmptyWhenPetIsNotFoundByNameUsingSpecification() {
+            var petBolinha = Pet.builder().name("Bolinha").build();
+            var petBola = Pet.builder().name("Bola").build();
+            var petRex = Pet.builder().name("Rex").build();
+            petReposirory.save(petBolinha);
+            petReposirory.save(petBola);
+            petReposirory.save(petRex);
+
+            Specification<Pet> bolSpec = PetSpecification.nameContains("sasa");
+
+            List<Pet> petsFound = petReposirory.findAll(bolSpec);
+
+            assertTrue(petsFound.isEmpty());
+        }
+
     }
 }
